@@ -11,7 +11,8 @@ import {
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { Prisma } from 'generated/prisma/client';
+// import { Prisma } from 'generated/prisma/client';
+import { Prisma } from '@prisma/client'; //  المسار الصحيح
 
 @UseGuards(JwtAuthGuard)
 @Controller('todos')

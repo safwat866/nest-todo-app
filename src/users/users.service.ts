@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'generated/prisma/client';
+// import { Prisma } from 'generated/prisma/client';
+import { Prisma } from '@prisma/client'; //  المسار الصحيح
 import { PrismaService } from 'src/database/database.service';
 
 @Injectable()
