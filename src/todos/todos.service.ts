@@ -7,29 +7,41 @@ import { PrismaService } from 'src/database/database.service';
 export class TodosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createTodoDto: Prisma.TodoCreateInput) {
-    return this.prisma.todo.create({
-      data: createTodoDto,
+  async create(userId: string, createTodoDto: Prisma.TodoCreateInput) {
+    return await this.prisma.todo.create({
+      data: {
+        ...createTodoDto,
+        user: {
+          connect: { id: userId },
+        },
+      },
     });
   }
 
-  findAll(userId: string) {
-    return this.prisma.todo.findMany({
+  async findAll(userId: string) {
+    return await this.prisma.todo.findMany({
       where: {
-        userId
-      }
-    })
+        userId,
+      },
+    });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} todo`;
+  async update(id: string, updateTodoDto: Prisma.TodoUpdateInput) {
+    return await this.prisma.todo.update({
+      where: { id },
+      data: updateTodoDto,
+    });
   }
 
-  update(id: string, updateTodoDto: Prisma.TodoUpdateInput) {
-    return `This action updates a #${id} todo`;
+  async remove(id: string) {
+    return await this.prisma.todo.delete({
+      where: { id },
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} todo`;
+  async removeFinishedTasks(userId: string) {
+    return await this.prisma.todo.deleteMany({
+      where: { userId, done: true },
+    });
   }
 }

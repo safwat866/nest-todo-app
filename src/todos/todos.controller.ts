@@ -20,18 +20,13 @@ export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  create(@Body() createTodoDto: Prisma.TodoCreateInput) {
-    return this.todosService.create(createTodoDto);
+  create(@Body() createTodoDto: Prisma.TodoCreateInput, @Req() req) {
+    return this.todosService.create(req.user.id, createTodoDto);
   }
 
   @Get()
   findAll(@Req() req) {
-    return this.todosService.findAll(req.user.sub);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todosService.findOne(id);
+    return this.todosService.findAll(req.user.id);
   }
 
   @Patch(':id')
@@ -40,6 +35,11 @@ export class TodosController {
     @Body() updateTodoDto: Prisma.TodoUpdateInput,
   ) {
     return this.todosService.update(id, updateTodoDto);
+  }
+
+  @Delete('/delete-done')
+  removeDone(@Req() req) {
+    return this.todosService.removeFinishedTasks(req.user.id);
   }
 
   @Delete(':id')
